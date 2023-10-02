@@ -1,7 +1,7 @@
-let poid = prompt("poids en Kilogramme :");
+let poids = prompt("poids en Kilogramme :");
 let taille = prompt("taille en centimetre :") / 100;
 
-let imc = (poid / (taille*taille));
+let imc = (poids / (taille*taille));
 
 if (imc < 18.5)
 {
