@@ -1,11 +1,8 @@
-let notes = prompt("Entrez la note de l'éleve");
-const notesLst = notes.split(',')
-console.log(notesLst);
-
+let notes = prompt("Entrez les notes de l'éleve séparée par des virgules (,)").split(',');
 let moyenne = 0;
-notesLst.forEach(element => {
+notes.forEach(element => {
     moyenne += parseInt(element);
 });
 
-moyenne /= notesLst.length;
+moyenne /= notes.length;
 alert("La moyenne de l'éleve est : " + moyenne)
