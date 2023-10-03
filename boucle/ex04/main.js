@@ -1,13 +1,11 @@
-let notes = [];
-let nbrNotes = parseInt(prompt("Combiens de notes voulez vous entrer ?"));
-for (let i = 0; i < nbrNotes; i++) {
-    notes.push(parseInt(prompt("Entrez la note de l'éleve")));
-}
+let notes = prompt("Entrez la note de l'éleve");
+const notesLst = notes.split(',')
+console.log(notesLst);
 
 let moyenne = 0;
-notes.forEach(element => {
-    moyenne += element;
+notesLst.forEach(element => {
+    moyenne += parseInt(element);
 });
 
-moyenne /= notes.length;
+moyenne /= notesLst.length;
 alert("La moyenne de l'éleve est : " + moyenne)
