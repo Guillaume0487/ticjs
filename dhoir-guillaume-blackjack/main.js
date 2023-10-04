@@ -1,5 +1,4 @@
 let piocher = (player, card_list) => {
-    console.log(card_list);
     let randomCard = card_list[Math.floor(Math.random() * card_list.length)] // séléctionne une carte aléatoir => randomCard
     player.push(randomCard) // donne la carte aléatoire au joueur
     card_list.splice(randomCard, 1) // suprime la carte aléatoire
@@ -11,17 +10,42 @@ function someCard(player) {
     for (let i = 0; i < player.length; i++) {
         some += player[i];
     }
-    return some === 21
+    return some
+}
+
+function croupierCard(croupier) {
+    let numberCard = ""
+    for (let i = 0; i < croupier.length - 1; i++) {
+        numberCard += '▮';
+    }
+    return numberCard
 }
 
 function game(player, croupier, card_list) {
-    let pioche = prompt(`joueur : ${player}\ncroupier : ${croupier[0]}\n\nVoulez vous piocher ? (y/n)`);
-    if (pioche === 'y') {
+    let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`);
+    if (pioche !== 'y' && pioche !== 'n') {
+        while (true) {
+            pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVous pouvez que répondre par 'y' ou 'n' (y/n)`)
+            if (pioche === 'y' || pioche === 'n')
+                break
+        }
+    } else if (pioche === 'y') {
         piocher(player, card_list)
-        if (someCard(player))
+        if (someCard(player) === 21)
             return true
+        else if (someCard(player) > 21)
+            return false
     } else if (pioche === 'n')
         alert("Vous avez passée")
+    if (someCard(croupier) < 17) {
+        piocher(croupier, card_list)
+        if (someCard(croupier) === 21)
+            return false
+        else if (someCard(croupier) > 21)
+            return true
+    }
+    if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
+        return true
     return game(player, croupier, card_list)
 
 
@@ -40,8 +64,22 @@ function main() {
         piocher(player, card_list)
         piocher(croupier, card_list)
     }
-    game(player, croupier, card_list)
-    
+    let test = game(player, croupier, card_list)
+    if (test === false)
+        alert(`Vous avez perdue\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
+    else
+        alert(`Vous avez gagnée\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
+    let replay = prompt("Voulez vous rejouer ? (y/n)")
+    if (replay !== 'y' && replay !== 'n'){
+        while (true) {
+            replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)")
+            if (replay === 'y' || replay === 'n')
+                break
+        }
+    } else if (replay === 'y')
+        main()
+    else
+        alert("Aurevoir")
 }
 
 main()
