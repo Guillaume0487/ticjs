@@ -1,6 +1,6 @@
 let piocher = (player, card_list) => {
-    let randomCard = card_list[Math.floor(Math.random() * card_list.length)] // séléctionne une carte aléatoir => randomCard
-    player.push(randomCard) // donne la carte aléatoire au joueur
+    let randomCard = Math.floor(Math.random() * card_list.length)// séléctionne une carte aléatoir => randomCard
+    player.push(card_list[randomCard]) // donne la carte aléatoire au joueur
     card_list.splice(randomCard, 1) // suprime la carte aléatoire du paquet de carte
     return player
 }
@@ -23,6 +23,10 @@ let croupierCard = (croupier) => {
 
 function game(player, croupier, card_list) {
     while (true) {
+        if (card_list.length < 1){
+            alert("il n'y a plus de carte")
+            break
+        }
         let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`).toLocaleLowerCase();
         if (pioche !== 'y' && pioche !== 'n') {
             while (true) { // le joueur entre dans cet boucle infinit si il rentre autre chose que ('y') ou ('n')
@@ -41,7 +45,11 @@ function game(player, croupier, card_list) {
             break
     }
     while (true) {
-        if (someCard(croupier) > someCard(player))
+        if (card_list.length < 1){
+            alert("il n'y a plus de carte")
+            break
+        }
+        else if (someCard(croupier) > someCard(player))
             return false
         else if (someCard(croupier) < 17) {
             piocher(croupier, card_list)
@@ -54,26 +62,40 @@ function game(player, croupier, card_list) {
         if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
             return true
     }
-    return game(player, croupier, card_list)
-
-
+    if (someCard(croupier) > someCard(player))
+        return false
+    else if
+        (someCard(croupier) < someCard(player))
+        return true
+    else
+        return null
 }
 
-function main() {
+let refresh = () => {
     let card_list = [
         1,2,3,4,5,6,7,8,9,10,10,10,10,
         1,2,3,4,5,6,7,8,9,10,10,10,10,
         1,2,3,4,5,6,7,8,9,10,10,10,10,
         1,2,3,4,5,6,7,8,9,10,10,10,10,
-    ].sort(() => (Math.random() > 0.5) ? 1 : -1) // mélange les cartes
+    ]
+    return card_list
+}
+
+function main(lst) {
+    console.log(lst);
+    if (lst.length < 1)
+        lst = refresh()
+    lst.sort(() => (Math.random() > 0.5) ? 1 : -1) // mélange les cartes
     let player = []
     let croupier = []
     for (let i = 0; i < 2; i++) { // les joueurs pioche 2 cartes
-        piocher(player, card_list)
-        piocher(croupier, card_list)
+        piocher(player, lst)
+        piocher(croupier, lst)
     }
-    let test = game(player, croupier, card_list)
-    if (test === false)
+    let test = game(player, croupier, lst)
+    if (test === null)
+        alert(`Egalité parfaite\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
+    else if (test === false)
         alert(`Vous avez perdue\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
     else
         alert(`Vous avez gagnée\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
@@ -85,7 +107,7 @@ function main() {
                 break
         }
     }
-    replay === 'y' ? main() : alert("Aurevoir")
+    replay === 'y' ? main(lst) : alert("Aurevoir")
 }
 
-main()
+main(refresh())
