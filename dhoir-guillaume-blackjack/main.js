@@ -1,3 +1,10 @@
+let card_list = [
+    1,2,3,4,5,6,7,8,9,10,10,10,10,
+    1,2,3,4,5,6,7,8,9,10,10,10,10,
+    1,2,3,4,5,6,7,8,9,10,10,10,10,
+    1,2,3,4,5,6,7,8,9,10,10,10,10,
+]
+
 let piocher = (player, card_list) => {
     let randomCard = Math.floor(Math.random() * card_list.length)// séléctionne une carte aléatoir => randomCard
     player.push(card_list[randomCard]) // donne la carte aléatoire au joueur
@@ -49,18 +56,17 @@ function game(player, croupier, card_list) {
             alert("il n'y a plus de carte")
             break
         }
-        else if (someCard(croupier) > someCard(player))
+        if (someCard(croupier) > someCard(player))
             return false
-        else if (someCard(croupier) < 17) {
-            piocher(croupier, card_list)
-            if (someCard(croupier) === 21)
-                return false
-            else if (someCard(croupier) > 21)
-                return true
-        } else
-            break
-        if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
+        else if (someCard(croupier) > 21)
             return true
+        else if (someCard(croupier) === 21)
+            return false
+        else if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
+            return true
+        else if (someCard(croupier) < 17){
+            piocher(croupier, card_list)
+        }
     }
     if (someCard(croupier) > someCard(player))
         return false
@@ -71,26 +77,19 @@ function game(player, croupier, card_list) {
         return null
 }
 
-let refresh = () => {
-    let card_list = [
-        1,2,3,4,5,6,7,8,9,10,10,10,10,
-        1,2,3,4,5,6,7,8,9,10,10,10,10,
-        1,2,3,4,5,6,7,8,9,10,10,10,10,
-        1,2,3,4,5,6,7,8,9,10,10,10,10,
-    ]
-    return card_list
-}
-
 function main(lst) {
     console.log(lst);
-    if (lst.length < 1)
-        lst = refresh()
     lst.sort(() => (Math.random() > 0.5) ? 1 : -1) // mélange les cartes
     let player = []
     let croupier = []
-    for (let i = 0; i < 2; i++) { // les joueurs pioche 2 cartes
-        piocher(player, lst)
-        piocher(croupier, lst)
+    if (lst.length >= 4) {
+        for (let i = 0; i < 2; i++) { // les joueurs pioche 2 cartes
+            piocher(player, lst)
+            piocher(croupier, lst)
+        }
+    } else {
+        alert("il n'y a plus asser de cartes")
+        return
     }
     let test = game(player, croupier, lst)
     if (test === null)
@@ -107,7 +106,9 @@ function main(lst) {
                 break
         }
     }
-    replay === 'y' ? main(lst) : alert("Aurevoir")
+    if (lst.length >= 4) {
+        replay === 'y' ? main(lst) : alert("Aurevoir")
+    }
 }
 
-main(refresh())
+main(card_list)
