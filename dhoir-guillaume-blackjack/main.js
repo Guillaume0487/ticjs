@@ -1,51 +1,59 @@
 let piocher = (player, card_list) => {
     let randomCard = card_list[Math.floor(Math.random() * card_list.length)] // séléctionne une carte aléatoir => randomCard
     player.push(randomCard) // donne la carte aléatoire au joueur
-    card_list.splice(randomCard, 1) // suprime la carte aléatoire
+    card_list.splice(randomCard, 1) // suprime la carte aléatoire du paquet de carte
     return player
 }
 
-function someCard(player) {
+let someCard = (player) => {
     let some = 0
     for (let i = 0; i < player.length; i++) {
-        some += player[i];
+        some += player[i]; // j'ajoute à some l'element à l'index (i) du tableau entré en parametre
     }
     return some
 }
 
-function croupierCard(croupier) {
+let croupierCard = (croupier) => {
     let numberCard = ""
     for (let i = 0; i < croupier.length - 1; i++) {
-        numberCard += '▮';
+        numberCard += '🀆'; //ajoute un symbol '🀆' à numberCard tant que (i) est inferieur à la taille du (tableau - 1)
     }
     return numberCard
 }
 
 function game(player, croupier, card_list) {
-    let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`);
-    if (pioche !== 'y' && pioche !== 'n') {
-        while (true) {
-            pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVous pouvez que répondre par 'y' ou 'n' (y/n)`)
-            if (pioche === 'y' || pioche === 'n')
-                break
+    while (true) {
+        let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`).toLocaleLowerCase();
+        if (pioche !== 'y' && pioche !== 'n') {
+            while (true) { // le joueur entre dans cet boucle infinit si il rentre autre chose que ('y') ou ('n')
+                pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVous pouvez que répondre par 'y' ou 'n' (y/n)`).toLocaleLowerCase()
+                if (pioche === 'y' || pioche === 'n')
+                    break // casse la boucle si (pioche) est strictement egale à ('y') ou ('n')
+            }
         }
-    } else if (pioche === 'y') {
-        piocher(player, card_list)
-        if (someCard(player) === 21)
-            return true
-        else if (someCard(player) > 21)
+        if (pioche === 'y') {
+            piocher(player, card_list)
+            if (someCard(player) === 21)
+                return true
+            else if (someCard(player) > 21)
+                return false
+        } else if (pioche === 'n')
+            break
+    }
+    while (true) {
+        if (someCard(croupier) > someCard(player))
             return false
-    } else if (pioche === 'n')
-        alert("Vous avez passée")
-    if (someCard(croupier) < 17) {
-        piocher(croupier, card_list)
-        if (someCard(croupier) === 21)
-            return false
-        else if (someCard(croupier) > 21)
+        else if (someCard(croupier) < 17) {
+            piocher(croupier, card_list)
+            if (someCard(croupier) === 21)
+                return false
+            else if (someCard(croupier) > 21)
+                return true
+        } else
+            break
+        if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
             return true
     }
-    if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
-        return true
     return game(player, croupier, card_list)
 
 
@@ -69,17 +77,15 @@ function main() {
         alert(`Vous avez perdue\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
     else
         alert(`Vous avez gagnée\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
-    let replay = prompt("Voulez vous rejouer ? (y/n)")
+    let replay = prompt("Voulez vous rejouer ? (y/n)").toLocaleLowerCase()
     if (replay !== 'y' && replay !== 'n'){
         while (true) {
-            replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)")
+            replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)").toLocaleLowerCase()
             if (replay === 'y' || replay === 'n')
                 break
         }
-    } else if (replay === 'y')
-        main()
-    else
-        alert("Aurevoir")
+    }
+    replay === 'y' ? main() : alert("Aurevoir")
 }
 
 main()
