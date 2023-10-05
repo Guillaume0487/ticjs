@@ -108,6 +108,9 @@ function main(lst) {
     }
     if (lst.length >= 4) {
         replay === 'y' ? main(lst) : alert("Aurevoir")
+    } else {
+        alert("il n'y a plus asser de cartes")
+        return
     }
 }
 
