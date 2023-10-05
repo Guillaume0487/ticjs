@@ -36,111 +36,108 @@ let piocheChance = () => { // returne true ou false de manière aléatoire
     return croupierPioche[Math.floor(Math.random() * croupierPioche.length)]
 }
 
-function game(player, croupier, card_list) {
-    while (true) {
-        if (card_list.length < 1){
+function game(player, croupier, card_list) { // fonction dans la que le jeu tourne et revoie un booleen pour savoir si le joueur à gagner ou non
+    while (true) { // tant que vrais la boucle tourne elle peut etre stoper par break
+        if (card_list.length < 1){ // si la taille de card_list est plus petit que 1
             alert("Vous ne pouvez pas piocher, il n'y a plus de carte")
-            piocheChance()
             break
         }
         let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}🀆\n\nVoulez vous piocher ? (y/n)`).toLocaleLowerCase();
-        if (pioche !== 'y' && pioche !== 'n') {
-            while (true) { // le joueur entre dans cet boucle infinit si il rentre autre chose que ('y') ou ('n')
+        if (pioche !== 'y' && pioche !== 'n') { // si pioche est différent de 'Y' et 'n'
+            while (true) { // tant que vrais la boucle tourne elle peut etre stoper par break
                 pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}🀆\n\nVous pouvez que répondre par 'y' ou 'n' (y/n)`).toLocaleLowerCase()
-                if (pioche === 'y' || pioche === 'n')
-                    break // casse la boucle si (pioche) est strictement egale à ('y') ou ('n')
+                if (pioche === 'y' || pioche === 'n') // si pioche est strictement égale à 'y' ou 'n'
+                    break
             }
         }
-        if (pioche === 'y') {
+        if (pioche === 'y') { // si pioche est strictement égale à 'y'
             piocher(player, card_list)
-            if (someCard(player) > 21) {
-                asCard(player)
-                if (someCard(player) > 21)
+            if (someCard(player) > 21) { // si la somme des cartes de player est plus grand que 21
+                asCard(player) // change la valeur d'un as si il y en a un
+                if (someCard(player) > 21) // si la somme des carte de player est plus grand que 21
                     return false
             }
-            if (someCard(player) === 21)
+            if (someCard(player) === 21) // si la somme des cartes de player est strictement égale à 21
                 return true
-        } else if (pioche === 'n'){
-            if (someCard(player) === 21)
+        } else if (pioche === 'n'){  // sinon si pioche est strictement égale à 'n'
+            if (someCard(player) === 21) // si la somme des cartes de player est strictement égale à 21
                 return true
-            else
+            else // sinon
                 break
         }
     }
-    while (true) {
-        if (card_list.length < 1){
+    while (true) { // tant que vrais la boucle tourne elle peut etre stoper par break
+        if (card_list.length < 1){ // si la taille de card_list est plus petit que 1
             alert("Le croupier ne peut pas piocher, il n'y a plus de carte")
-            piocheChance()
             break
         }
-        if (someCard(croupier) > 21) {
-            asCard(croupier)
-                if (someCard(croupier) > 21)
+        if (someCard(croupier) > 21) { // si la somme des cartes du croupier est plus grand que 21
+            asCard(croupier) // change la valeur d'un as si il y en a un
+                if (someCard(croupier) > 21) // si la somme des cartes du croupier est plus grand que 21
                     return true
         }
-        if (someCard(croupier) < 17)
+        if (someCard(croupier) < 17) // si la somme des cartes du croupier est plus petite que 17
             piocher(croupier, card_list)
-        else if (someCard(croupier) > someCard(player))
+        else if (someCard(croupier) > someCard(player)) // sinon si la somme des cartes du croupier est plus grand que celle du joueur
             return false
-        else if (someCard(croupier) === 21)
+        else if (someCard(croupier) === 21) // sinon si la somme des cartes du croupier est strictement égale à 21
             return false
-        if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player)) {
-            if (piocheChance())
+        if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player)) { // si la somme des cartes du croupier est plus grand ou égale à 17 et plus petit que la somme des cartes du joueur
+            if (piocheChance()) // si la fonction piocheChance est vrais
                 piocher(croupier, card_list)
-            else
+            else // sinon
                 return true
-        } else if (someCard(croupier) === someCard(player)) {
-            if (piocheChance())
+        } else if (someCard(croupier) === someCard(player)) { // sinon si la somme des cartes du croupier est strictement égale à celle du joueur
+            if (piocheChance()) // si la fonction piocheChance est vrais
                 piocher(croupier, card_list)
-            else
+            else // sinon
                 return null
         }
     }
-    if (someCard(croupier) === someCard(player))
+    if (someCard(croupier) === someCard(player)) // sinon si la somme des cartes du croupier est strictement égale à celle du joueur
         return null
-    if (someCard(croupier) > someCard(player))
+    if (someCard(croupier) > someCard(player)) // si la somme des cartes du croupier est plus grand que celle du joueur
         return false
-    else if
-        (someCard(croupier) < someCard(player))
+    else if (someCard(croupier) < someCard(player)) // si la somme des cartes du croupier est plus petit que celle du joueur
         return true
-    else
+    else // sinon
         return false
 }
 
-function main(lst) {
+function main(lst) { // fonction qui démmare le jeu
     lst.sort(() => Math.random() - 0.5) // mélange les cartes
     let player = []
     let croupier = []
-    if (lst.length >= 4) {
+    if (lst.length >= 4) { // si la taille de lst est plus grand ou égale à 4
         for (let i = 0; i < 2; i++) { // les joueurs pioche 2 cartes
             piocher(player, lst)
             piocher(croupier, lst)
         }
-    } else {
+    } else { // sinon
         alert("il n'y a plus asser de cartes")
         return
     }
-    let test = game(player, croupier, lst)
-    if (test === null)
+    let verif = game(player, croupier, lst)
+    if (verif === null) // si verif est strictement égale à null
         alert(`Egalité parfaite\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
-    else if (test === false)
+    else if (verif === false) // si verif est strictement égale à faux
         alert(`Vous avez perdue\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
-    else
+    else // sinon
         alert(`Vous avez gagnée\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
-    if (lst.length >= 4) {
+    if (lst.length >= 4) { // si la taille de lst est plus grand ou égale à 4
         let replay = prompt("Voulez vous rejouer ? (y/n)").toLocaleLowerCase()
-        if (replay !== 'y' && replay !== 'n'){
-            while (true) {
+        if (replay !== 'y' && replay !== 'n'){ // si replay est strictement différent de 'y' et 'n'
+            while (true) { // tant que vrais la boucle tourne elle peut etre stoper par break
                 replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)").toLocaleLowerCase()
-                if (replay === 'y' || replay === 'n')
+                if (replay === 'y' || replay === 'n') // si replay est strictement égale à 'y' ou 'n'
                     break
             }
         }
-        replay === 'y' ? main(lst) : alert("Aurevoir")
-    } else {
+        replay === 'y' ? main(lst) : alert("Aurevoir") // si replay est strictement égale à 'y' fais la fonction main avec une liste en parametre sinon fais une alerte avec le message "Aurevoir"
+    } else { // sinon
         alert("il n'y a plus asser de cartes pour relancer une partie")
         return
     }
 }
 
-main(card_list)
+main(card_list) // start
