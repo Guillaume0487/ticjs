@@ -28,10 +28,16 @@ let croupierCard = (croupier) => {
     return numberCard
 }
 
+let piocheChance = () => {
+    let croupierPioche = [true, false]
+    console.log(croupierPioche[Math.floor(Math.random() * croupierPioche.length)]);
+    return croupierPioche[Math.floor(Math.random() * croupierPioche.length)]
+}
+
 function game(player, croupier, card_list) {
     while (true) {
         if (card_list.length < 1){
-            alert("il n'y a plus de carte")
+            alert("Vous ne pouvez pas piocher, il n'y a plus de carte")
             break
         }
         let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`).toLocaleLowerCase();
@@ -53,18 +59,26 @@ function game(player, croupier, card_list) {
     }
     while (true) {
         if (card_list.length < 1){
-            alert("il n'y a plus de carte")
+            alert("Le croupier ne peut pas piocher, il n'y a plus de carte")
             break
         }
-        if (someCard(croupier) > someCard(player))
-            return false
-        else if (someCard(croupier) > 21)
+        if (someCard(croupier) > 21)
             return true
+        else if (someCard(croupier) > someCard(player))
+            return false
         else if (someCard(croupier) === 21)
             return false
-        else if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player))
-            return true
-        else if (someCard(croupier) < 17){
+        else if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player)) {
+            if (piocheChance())
+                piocher(croupier, card_list)
+            else
+                return true
+        } else if (someCard(croupier) === someCard(player)) {
+            if (piocheChance())
+                piocher(croupier, card_list)
+            else
+                return null
+        } else if (someCard(croupier) < 17){
             piocher(croupier, card_list)
         }
     }
@@ -78,8 +92,8 @@ function game(player, croupier, card_list) {
 }
 
 function main(lst) {
+    lst.sort(() => Math.random() - 0.5) // mélange les cartes
     console.log(lst);
-    lst.sort(() => (Math.random() > 0.5) ? 1 : -1) // mélange les cartes
     let player = []
     let croupier = []
     if (lst.length >= 4) {
@@ -98,18 +112,18 @@ function main(lst) {
         alert(`Vous avez perdue\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
     else
         alert(`Vous avez gagnée\n\nplayer : ${player} (${someCard(player)})\ncroupier : ${croupier} (${someCard(croupier)})`)
-    let replay = prompt("Voulez vous rejouer ? (y/n)").toLocaleLowerCase()
-    if (replay !== 'y' && replay !== 'n'){
-        while (true) {
-            replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)").toLocaleLowerCase()
-            if (replay === 'y' || replay === 'n')
-                break
-        }
-    }
     if (lst.length >= 4) {
+        let replay = prompt("Voulez vous rejouer ? (y/n)").toLocaleLowerCase()
+        if (replay !== 'y' && replay !== 'n'){
+            while (true) {
+                replay = prompt("Vous pouvez répondre que par 'y' ou par 'n'\n\nVoulez vous rejouer ? (y/n)").toLocaleLowerCase()
+                if (replay === 'y' || replay === 'n')
+                    break
+            }
+        }
         replay === 'y' ? main(lst) : alert("Aurevoir")
     } else {
-        alert("il n'y a plus asser de cartes")
+        alert("il n'y a plus asser de cartes pour relancer une partie")
         return
     }
 }
