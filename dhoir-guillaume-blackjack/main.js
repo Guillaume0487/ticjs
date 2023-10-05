@@ -1,8 +1,8 @@
 let card_list = [
-    1,2,3,4,5,6,7,8,9,10,10,10,10,
-    1,2,3,4,5,6,7,8,9,10,10,10,10,
-    1,2,3,4,5,6,7,8,9,10,10,10,10,
-    1,2,3,4,5,6,7,8,9,10,10,10,10,
+    11,2,3,4,5,6,7,8,9,10,10,10,10,
+    11,2,3,4,5,6,7,8,9,10,10,10,10,
+    11,2,3,4,5,6,7,8,9,10,10,10,10,
+    11,2,3,4,5,6,7,8,9,10,10,10,10,
 ]
 
 let piocher = (player, card_list) => {
@@ -18,6 +18,17 @@ let someCard = (player) => {
         some += player[i]; // j'ajoute à some l'element à l'index (i) du tableau entré en parametre
     }
     return some
+}
+
+let asCard = (lst) => {
+    if (someCard(lst) > 21) {
+        for (let i = 0; i < lst.length; i++) {
+            if (lst[i] === 11) {
+                lst[i] = 1
+                break
+            }
+        }
+    }
 }
 
 let croupierCard = (croupier) => {
@@ -37,6 +48,7 @@ function game(player, croupier, card_list) {
     while (true) {
         if (card_list.length < 1){
             alert("Vous ne pouvez pas piocher, il n'y a plus de carte")
+            piocheChance()
             break
         }
         let pioche = prompt(`joueur : ${player} (${someCard(player)})\ncroupier : ${croupier[0]}${croupierCard(croupier)}\n\nVoulez vous piocher ? (y/n)`).toLocaleLowerCase();
@@ -49,25 +61,38 @@ function game(player, croupier, card_list) {
         }
         if (pioche === 'y') {
             piocher(player, card_list)
+            if (someCard(player) > 21) {
+                asCard(player)
+                if (someCard(player) > 21)
+                    return false
+            }
             if (someCard(player) === 21)
                 return true
-            else if (someCard(player) > 21)
-                return false
-        } else if (pioche === 'n')
-            break
+        } else if (pioche === 'n'){
+            if (someCard(player) === 21)
+                return true
+            else
+                break
+        }
     }
     while (true) {
         if (card_list.length < 1){
             alert("Le croupier ne peut pas piocher, il n'y a plus de carte")
+            piocheChance()
             break
         }
-        if (someCard(croupier) > 21)
-            return true
+        if (someCard(croupier) > 21) {
+            asCard(croupier)
+                if (someCard(croupier) > 21)
+                    return true
+        }
+        if (someCard(croupier) < 17)
+            piocher(croupier, card_list)
         else if (someCard(croupier) > someCard(player))
             return false
         else if (someCard(croupier) === 21)
             return false
-        else if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player)) {
+        if (someCard(croupier) >= 17 && someCard(croupier) < someCard(player)) {
             if (piocheChance())
                 piocher(croupier, card_list)
             else
@@ -77,17 +102,17 @@ function game(player, croupier, card_list) {
                 piocher(croupier, card_list)
             else
                 return null
-        } else if (someCard(croupier) < 17){
-            piocher(croupier, card_list)
         }
     }
+    if (someCard(croupier) === someCard(player))
+        return null
     if (someCard(croupier) > someCard(player))
         return false
     else if
         (someCard(croupier) < someCard(player))
         return true
     else
-        return null
+        return false
 }
 
 function main(lst) {
