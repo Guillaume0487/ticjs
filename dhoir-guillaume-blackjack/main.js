@@ -33,7 +33,7 @@ let asCard = (lst) => { // change la valeur de l'as si la somme des cartes du jo
 
 let piocheChance = () => { // returne true ou false de manière aléatoire
     let croupierPioche = [true, false]
-    return croupierPioche[Math.floor(Math.random() * croupierPioche.length)] // choisie un des deux element de la liste au dessue en le retourne
+    return croupierPioche[Math.floor(Math.random() * croupierPioche.length)]
 }
 
 function game(player, croupier, card_list) {
