@@ -30,8 +30,7 @@ let croupierCard = (croupier) => {
 
 let piocheChance = () => {
     let croupierPioche = [true, false]
-    console.log(croupierPioche[Math.floor(Math.random() * croupierPioche.length)]);
-    return croupierPioche[Math.floor(Math.random() * croupierPioche.length)]
+    return croupierPioche[Math.floor(Math.random() * croupierPioche.length)] // choisie un des deux element de la liste au dessue en le retourne
 }
 
 function game(player, croupier, card_list) {
@@ -93,7 +92,6 @@ function game(player, croupier, card_list) {
 
 function main(lst) {
     lst.sort(() => Math.random() - 0.5) // mélange les cartes
-    console.log(lst);
     let player = []
     let croupier = []
     if (lst.length >= 4) {
